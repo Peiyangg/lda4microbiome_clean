@@ -1,0 +1,15 @@
+[project]
+name = "notebook-pig-poster"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "kaleido>=1.2.0",
+    "lda4microbiome>=0.1.21",
+    "marimo>=0.22.0",
+    "pandas>=3.0.2",
+    "plotly>=6.6.0",
+    "scikit-learn>=1.8.0",
+    "seaborn>=0.13.2",
+]
