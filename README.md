@@ -72,16 +72,16 @@ results = processor.process_all()
 
 `LDATrainer` supports two implementations:
 
-- **VB (variational Bayesian)** via `gensim` — faster, good for exploration
-- **MCMC** via `MALLET` — slower but often more accurate; requires downloading MALLET separately
+- **`"gensim"`** — variational Bayesian via the `gensim` library; faster, good for exploration
+- **`"mallet"`** — MCMC via MALLET; slower but often more accurate; requires downloading MALLET separately
 
 Models are trained across a range of *k* values (default: 2–20). Results are saved to the output folder.
 
 ```python
 trainer = LDATrainer(
     base_directory="lda_output/",
-    implementation="MCMC",           # or "VB"
-    path_to_mallet="path/to/mallet"  # required for MCMC only
+    implementation="mallet",         # or "gensim"
+    path_to_mallet="path/to/mallet"  # required for mallet only
 )
 lda_results = trainer.train_models(MC_range=range(2, 11))
 ```
