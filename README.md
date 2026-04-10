@@ -105,6 +105,8 @@ widget  # display in a marimo notebook
 
 ![StripeSankey diagram](figure/StripeSankey_click.png)
 
+*Figure: StripeSankey applied to pig gut microbiota data from [Comer et al. (2026)](https://www.sciencedirect.com/science/article/pii/S2666517426000313).*
+
 The StripeSankey diagram is designed to diagnose a core modelling question: **should a meaningful sample group be explained by multiple specialised topics, or one comprehensive topic?** It shows all candidate *k* values side by side, so you can see globally how samples split and merge as *k* increases, then click any flow to trace exactly which samples are moving and where they go.
 
 #### Investigating splitting flows with MCComparison
@@ -142,23 +144,20 @@ viz_results = viz.create_all_visualizations_interactive()
 
 ## Citation
 
-The StripeSankey diagram and sample–MC heatmap were developed in the context of the following studies. If you use this library, please consider citing the relevant work.
-
-**Pig gut microbiota study** (data used in the StripeSankey figure above; also applies the sample–MC heatmap exploration):
+The sample–MC heatmap visualisation has been applied in the following studies:
 
 Comer, L., Huo, P., Colleluori, C., Zhao, H., Akram, M. Z., Kpossou, R. F., Sureda, E. A., Aerts, J., & Everaert, N. (2026). From forest to farm: the impact of a broad spectrum of lifestyles on the porcine gut microbiota. *Current Research in Microbial Sciences*, 100576.
 [https://www.sciencedirect.com/science/article/pii/S2666517426000313](https://www.sciencedirect.com/science/article/pii/S2666517426000313)
 
-**Tomato hairy root disease study** (also applies the sample–MC heatmap exploration):
-
 Huo, P., Vargas Ribera, P., Rediers, H., & Aerts, J. (2025). Latent Dirichlet Allocation reveals tomato root-associated bacterial interactions responding to hairy root disease. *Environmental Microbiome*.
 [https://link.springer.com/article/10.1186/s40793-025-00822-2](https://link.springer.com/article/10.1186/s40793-025-00822-2)
 
-## Authors
+## Roadmap
 
-- **Peiyang Huo** (peiyang.huo@kuleuven.be) — AIDA Lab, KU Leuven
-- Luke Comer — NAMES Lab, KU Leuven
-- Pablo Vargas — IRTA Cabrils
-- Hans Rediers — KU Leuven
-- Nadia Everaert — KU Leuven
-- Jan Aerts — AIDA Lab / Leuven.AI, KU Leuven (corresponding author)
+- Add hovering action to show topic composition and feature exclusivity (for both StripeSankey and heatmap)
+- Improve StripeSankey visual encoding decisions
+- Improve StripeSankey workflow: first use perplexity and coherence to narrow down the *k* range, then zoom into that scope instead of displaying the full range
+- Ensemble topics workflow
+  - Can topic similarity be incorporated into the StripeSankey?
+- Add final visualisation screenshot to the README
+- Improve the cluster fetching function
