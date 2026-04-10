@@ -86,8 +86,6 @@ trainer = LDATrainer(
 lda_results = trainer.train_models(MC_range=range(2, 11))
 ```
 
-**Training time note**: On a dataset with 289 samples and 6,899 features, MCMC takes ~4.5 minutes per model; VB takes ~1 minute.
-
 ### Step 3 — Model Selection with StripeSankey
 
 Process training results into the StripeSankey format, then launch the interactive widget to explore all candidate models at once.
@@ -105,27 +103,9 @@ widget = StripeSankeyInline(
 widget  # display in a marimo notebook
 ```
 
-#### What the StripeSankey shows
+![StripeSankey diagram](figure/StripeSankey_click.png)
 
-The diagram has two parts:
-
-- **Perplexity bar chart** (above): one bar per *k* value. Shorter / brighter red bars indicate better model fit.
-- **Sankey diagram** (below): columns correspond to *k* values. Each node (stacked bar) represents one MC.
-  - Node height = number of samples assigned to that MC.
-  - Node colour = MC coherence score (blue colourmap; brighter = higher quality co-occurrence patterns).
-  - Each node is split into two segments: **upper** = high-probability samples (≥ 0.67), **lower** = medium-probability samples (≥ 0.33). Low-probability samples are omitted.
-  - Flows between adjacent columns show how samples transition as *k* increases; flow width = sample count.
-
-**Interactivity**:
-- Hover over a segment → tooltip with sample count, perplexity, and coherence score.
-- Click a flow → that flow is highlighted in orange and sample counts appear next to the corresponding nodes, tracing exactly which samples moved where.
-
-#### Two flow patterns to watch for
-
-As *k* increases, flows typically exhibit one of two behaviours:
-
-1. **Stable flow** — a group of samples is consistently represented by the same MC across candidate models. This indicates a robust, well-separated cluster.
-2. **Splitting / joining flow** — a group splits into two MCs (or two merge into one). This can represent hierarchical topic decomposition and warrants further investigation.
+The StripeSankey diagram is designed to diagnose a core modelling question: **should a meaningful sample group be explained by multiple specialised topics, or one comprehensive topic?** It shows all candidate *k* values side by side, so you can see globally how samples split and merge as *k* increases, then click any flow to trace exactly which samples are moving and where they go.
 
 #### Investigating splitting flows with MCComparison
 
@@ -136,8 +116,6 @@ mc_comp = MCComparison(
 )
 mc_comp.compare_two_mcs("K4_MC0", "K4_MC1", metadata=["Country", "Breed_type"])
 ```
-
-This compares the top features of two MCs and produces grouped bar charts for the specified metadata columns, helping you decide whether a split reflects genuine biological heterogeneity or is an artefact.
 
 ### Step 4 — Result Interpretation
 
@@ -162,38 +140,19 @@ viz_results = viz.create_all_visualizations_interactive()
 | **Stacked bar charts** | Samples grouped by metadata; bars show MC mixture proportions. Useful for comparing enterotype-like groups. |
 | **MC–feature heatmap** | Interactive heatmap of the MC × ASV matrix. Hover tooltips include taxonomy annotations at all levels and per-MC probabilities. |
 
-## Package Structure
-
-```
-lda4microbiome/
-├── preprocessing.py      # TaxonomyProcessor: ASV table + taxonomy → LDA-ready format
-├── training.py           # LDATrainer: Gensim VB and MALLET MCMC training
-├── selection.py          # SankeyDataProcessor: model outputs → StripeSankey JSON
-├── metrics.py            # Perplexity, coherence (Gensim c_v, MALLET XML), reconstruction
-├── visualization.py      # LDAModelVisualizerInteractive, MCComparison, TopicFeatureProcessor
-└── stripesankey.py       # StripeSankeyInline: interactive anywidget for marimo notebooks
-```
-
-## Dependencies
-
-**Widget only** (for displaying pre-computed results):
-- `anywidget`, `traitlets` (d3.js loaded via CDN)
-
-**Full pipeline**:
-- `gensim`, `pandas`, `numpy`, `scipy`, `scikit-learn`
-- `little_mallet_wrapper` (for MCMC training)
-- `plotly`, `kaleido`, `matplotlib`, `seaborn`
-
-**Notebooks**:
-- `marimo`
-
 ## Citation
 
-If you use `lda4microbiome` in your research, please cite:
+The StripeSankey diagram and sample–MC heatmap were developed in the context of the following studies. If you use this library, please consider citing the relevant work.
 
-> Peiyang Huo, Luke Comer, Pablo Vargas, Hans Rediers, Nadia Everaert, Jan Aerts.
-> *lda4microbiome: a Python library for exploratory data analysis of microbiome data using latent Dirichlet allocation.*
-> Bioinformatics (Application Note).
+**Pig gut microbiota study** (data used in the StripeSankey figure above; also applies the sample–MC heatmap exploration):
+
+Comer, L., Huo, P., Colleluori, C., Zhao, H., Akram, M. Z., Kpossou, R. F., Sureda, E. A., Aerts, J., & Everaert, N. (2026). From forest to farm: the impact of a broad spectrum of lifestyles on the porcine gut microbiota. *Current Research in Microbial Sciences*, 100576.
+[https://www.sciencedirect.com/science/article/pii/S2666517426000313](https://www.sciencedirect.com/science/article/pii/S2666517426000313)
+
+**Tomato hairy root disease study** (also applies the sample–MC heatmap exploration):
+
+Huo, P., Vargas Ribera, P., Rediers, H., & Aerts, J. (2025). Latent Dirichlet Allocation reveals tomato root-associated bacterial interactions responding to hairy root disease. *Environmental Microbiome*.
+[https://link.springer.com/article/10.1186/s40793-025-00822-2](https://link.springer.com/article/10.1186/s40793-025-00822-2)
 
 ## Authors
 
